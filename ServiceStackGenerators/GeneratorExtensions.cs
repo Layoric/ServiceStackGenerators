@@ -38,9 +38,6 @@ namespace ServiceStackGenerators
 
         internal static bool IsAuthFeatureRegistered(this TypeDeclarationSyntax typeDecSyntax)
         {
-            bool isConfigMethod = false;
-            bool takesFunq = false;
-            bool takesIAppHost = false;
             if(!typeDecSyntax.IsAppHostClass() && !typeDecSyntax.HasDeclaredInterface("IConfigureAppHost"))
             {
                 return false;
@@ -51,29 +48,20 @@ namespace ServiceStackGenerators
                 {
                     continue;
                 }
-                foreach (var token in member.DescendantTokens())
+
+                var methodSyn = (MethodDeclarationSyntax)member;
+
+                if (methodSyn.Identifier.ValueText == "Configure" &&
+                    methodSyn.ParameterList.Parameters.Any(x =>
+                    x.Type.ToString() == "Container" ||
+                    x.Type.ToString() == "IAppHost"))
                 {
-                    if (token.IsKind(SyntaxKind.IdentifierToken) &&
-                        token.ValueText == "Configure")
-                    {
-                        isConfigMethod = true;
-                    }
-
-                    if(token.IsKind(SyntaxKind.Argument) &&
-                        token.Text == "IAppHost")
-                    {
-                        takesIAppHost = true;
-                    }
-
-                    if (token.IsKind(SyntaxKind.Argument) &&
-                        token.Text == "Container")
-                    {
-                        takesIAppHost = true;
-                    }
+                    // HACK, could walk statements to ensure `Plugins.Add` was taking an AuthFeature?
+                    return methodSyn.Body.ToString().Contains("new AuthFeature");
                 }
             }
 
-            return isConfigMethod && (takesFunq || takesIAppHost);
+            return false;
         }
 
         internal static bool HasDeclaredBaseClass(this TypeDeclarationSyntax typeDecSyntax, string baseClassName)
