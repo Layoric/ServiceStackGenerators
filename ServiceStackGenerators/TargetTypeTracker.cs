@@ -13,31 +13,20 @@ namespace ServiceStackGenerators
         public int ProgramClassesFound { get; set; }
         public int AuthAttributeFound { get; set; }
         public int AuthFeatureFound { get; set; }
+        public int ModularStartupFound { get; set; }
+        public int AppHostsFound { get; set; }
+
+
         public string Namespace { get; set; }
         public string AssemblyRefServiceName { get; set; }
-        public bool NeedsAppHost
-        {
-            get
-            {
-                return ServiceClassesFound > 0;
-            }
-        }
 
-        public bool NeedsEntryPoint
-        {
-            get
-            {
-                return ProgramClassesFound == 0;
-            }
-        }
+        public bool NeedsAppHost => AppHostsFound == 0;
 
-        public bool NeedsAuthConfig
-        {
-            get
-            {
-                return AuthFeatureFound == 0 && AuthAttributeFound > 0;
-            }
-        }
+        public bool NeedsEntryPoint => ProgramClassesFound == 0;
+
+        public bool NeedsAuthConfig => AuthFeatureFound == 0 && AuthAttributeFound > 0;
+
+        public bool NeedsModularStartup => ModularStartupFound == 0;
 
         public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
         {
@@ -67,6 +56,16 @@ namespace ServiceStackGenerators
                 if(typeDecSyntax.IsAuthFeatureRegistered())
                 {
                     AuthFeatureFound++;
+                }
+
+                if(typeDecSyntax.HasDeclaredBaseClass("ModularStartup"))
+                {
+                    ModularStartupFound++;
+                }
+
+                if(typeDecSyntax.HasDeclaredBaseClass("AppHostBase"))
+                {
+                    AppHostsFound++;
                 }
             }
                 

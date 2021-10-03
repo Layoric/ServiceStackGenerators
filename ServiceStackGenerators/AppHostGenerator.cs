@@ -24,32 +24,34 @@ namespace ServiceStackGenerators
 
         public void Execute(GeneratorExecutionContext context)
         {
-            var codeBuilder = new StringBuilder();
             var targetTypeTracker = context.SyntaxContextReceiver as TargetTypeTracker;
             if (targetTypeTracker.NeedsEntryPoint)
             {
                 var code1 = string.Format(CodeTemplates.EntryPointTemplate, targetTypeTracker.Namespace);
-                context.AddSource(
-                "servicestack.apphost.entrypoint",
-                SourceText.From(code1,
-                Encoding.UTF8));
+                    context.AddSource(
+                    "servicestack.apphost.entrypoint",
+                    SourceText.From(code1,
+                    Encoding.UTF8));
             }
             if (targetTypeTracker.NeedsAppHost)
             {
                 context.AddSource(
-                "servicestack.apphost.host",
-                SourceText.From(string.Format(CodeTemplates.AppHostCodeTemplate, targetTypeTracker.Namespace, 
-                "Lala",
-                targetTypeTracker.AssemblyRefServiceName),
-                Encoding.UTF8));
-
-                context.AddSource(
-                "servicestack.apphost.startup",
-                SourceText.From(string.Format(CodeTemplates.StartupTemplate, targetTypeTracker.Namespace),
-                Encoding.UTF8));
+                    "servicestack.apphost.host",
+                    SourceText.From(string.Format(CodeTemplates.AppHostCodeTemplate, targetTypeTracker.Namespace,
+                    "Lala",
+                    targetTypeTracker.AssemblyRefServiceName),
+                    Encoding.UTF8));
             }
 
-            if(targetTypeTracker.NeedsAuthConfig)
+            if (targetTypeTracker.NeedsModularStartup)
+            {
+                context.AddSource(
+                    "servicestack.apphost.startup",
+                    SourceText.From(string.Format(CodeTemplates.StartupTemplate, targetTypeTracker.Namespace),
+                    Encoding.UTF8));
+            }
+
+            if (targetTypeTracker.NeedsAuthConfig)
             {
                 context.AddSource(
                     "servicestack.apphost.authconfig",

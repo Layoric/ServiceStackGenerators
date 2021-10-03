@@ -2,6 +2,8 @@
 using ServiceStack;
 using System;
 using ServiceStack.Auth;
+using Funq;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Console1
 {
@@ -24,6 +26,27 @@ namespace Console1
         public string Result { get; set; }
     }
 
+
+    //public class AppHost : AppHostBase
+    //{
+    //    public AppHost() : base("Test", typeof(FooService).Assembly) { }
+
+    //    // Configure your AppHost with the necessary configuration and dependencies your App needs
+    //    public override void Configure(Container container)
+    //    {
+    //        // enable server-side rendering, see: https://sharpscript.net/docs/sharp-pages
+    //        Plugins.Add(new SharpPagesFeature
+    //        {
+    //            EnableSpaFallback = true
+    //        });
+
+    //        SetConfig(new HostConfig
+    //        {
+    //            AddRedirectParamsToQueryString = true,
+    //            DebugMode = AppSettings.Get(nameof(HostConfig.DebugMode), HostingEnvironment.IsDevelopment())
+    //        });
+    //    }
+    //}
 
 
     //public class Program
