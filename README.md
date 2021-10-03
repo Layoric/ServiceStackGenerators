@@ -64,7 +64,7 @@ The above is enough to generate a working ServiceStack application utilizing you
 - Add friendly analyzer warnings about using default database implementations that use Sqlite in memory, warn about loss of data.
 - Package for NuGet once more polished.
 
-Probably a bad feature, but some kind of text based minimal config like a `json` or `yml` (I know..) file to enable swapping out features like AuthProviders and providing config. Eg am `apphost.yml`,
+Probably a bad feature, but some kind of text based minimal config like a `json` or `yml` (I know..) file to enable swapping out features like AuthProviders and providing config. Eg something like `apphost.yml`,
 ```
 name: MyAppHost
 appSettingsSource:
@@ -72,7 +72,6 @@ appSettingsSource:
  - path: 'appsettings.json'
 database:
   provider: postgres
-  connection: '...'
 authRepos:
   - name: CrednetialsAuthProvider
   - name: GoogleAuthProvider
