@@ -62,9 +62,22 @@ The above is enough to generate a working ServiceStack application utilizing you
 ### Possible future features
 - Detect names of custom AppHost + Startup classes rather than rely on naming convensions
 - Add friendly analyzer warnings about using default database implementations that use Sqlite in memory, warn about loss of data.
-- Probably a bad feature, but some kind of text based minimal config like a `json` or `yml` (I know..) file to enable swapping out features like AuthProviders and providing config.
- - This one is likely a bad idea as it extends the scope but also encourages the idea of baking in possible sensitive details like database connection strings into compiled source.
 - Package for NuGet once more polished.
+
+Probably a bad feature, but some kind of text based minimal config like a `json` or `yml` (I know..) file to enable swapping out features like AuthProviders and providing config. Eg am `apphost.yml`,
+```
+name: MyAppHost
+appSettingsSource:
+ - type: file
+ - path: 'appsettings.json'
+database:
+  provider: postgres
+  connection: '...'
+authRepos:
+  - name: CrednetialsAuthProvider
+  - name: GoogleAuthProvider
+```
+> This one is likely a bad idea as it extends the scope, would need to be designed in such a way that `appSettingsSource` supports secure providers so that sensitive details are not compiled into source. If packaged up with Docker this would potentially easily expose sensitive info like connection string passwords etc.
 
 ## Development
 
